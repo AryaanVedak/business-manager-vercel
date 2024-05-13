@@ -24,6 +24,7 @@ export async function POST(request: Request) {
     // console.log(billingData)
     return NextResponse.json({billingData: billingData.rows }, { status: 200 });
   } catch (error) {
+    console.log(error)
     return NextResponse.json({ error: "Failed to add data!" }, { status: 500 });
   }
 }

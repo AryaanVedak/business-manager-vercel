@@ -10,7 +10,7 @@ import {
 import { useEffect, useState } from "react";
 
 interface Invoice {
-  bill_no: String;
+  bill_no: KeyFormat;
   date: Date;
   product_name: string;
   amount: String;
@@ -90,7 +90,7 @@ export function DashTable() {
           </TableHeader>
           <TableBody>
             {invoices.map((invoice) => (
-              <TableRow> 
+              <TableRow key={invoice.bill_no}> 
                 <TableCell className="font-medium">{invoice.bill_no}</TableCell>
                 <TableCell className="font-medium">{new Date(invoice.date).toLocaleDateString()}</TableCell>
                 <TableCell>{invoice.product_name}</TableCell>

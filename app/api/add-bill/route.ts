@@ -21,8 +21,9 @@ export async function POST(request: Request) {
                 VALUES (${Bill_No}, ${Date}, ${Product_Name}, ${Amount}, ${GST_Percentage}, ${GST_Amount}, ${Total_Amount}, ${Paid_Date}, ${Remark}, ${Person}, ${Invoice});`;
     
     const billingData = await sql`SELECT * FROM billing;`;
+    // console.log(billingData)
     return NextResponse.json({billingData: billingData.rows }, { status: 200 });
   } catch (error) {
-    return NextResponse.json({ error }, { status: 500 });
+    return NextResponse.json({ error: "Failed to add data!" }, { status: 500 });
   }
 }

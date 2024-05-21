@@ -24,7 +24,7 @@ interface Invoice {
 }
 
 async function getData() {
-  const res = await fetch('http://https://business-manager-vercel-iomw1oru0-aryaan-vedaks-projects.vercel.app/api/get-bills')
+  const res = await fetch('http://https://business-manager-vercel.vercel.app/api/get-bills')
   // The return value is *not* serialized
   // You can return Date, Map, Set, etc.
  

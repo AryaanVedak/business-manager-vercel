@@ -130,7 +130,7 @@ export default function AddInvoice() {
       
       try {
         const response = await axios.post(
-          `http://https://business-manager-vercel-iomw1oru0-aryaan-vedaks-projects.vercel.app/api/add-bill?Bill_No=${data.billNo}`, // Replace with your actual API endpoint URL
+          `http://https://business-manager-vercel.vercel.app/api/add-bill?Bill_No=${data.billNo}`, // Replace with your actual API endpoint URL
           filteredData,
           {
             headers: {

@@ -1,9 +1,9 @@
 import { sql } from '@vercel/postgres';
 import { NextResponse } from 'next/server';
  
-export async function GET(request: Request) {
+export async function GET() {
   try {
-    const result = await sql`CREATE TABLE IF NOT EXISTS billing (
+    const result = await sql`CREATE TABLE IF NOT EXISTS Invoices (
       Bill_No SERIAL PRIMARY KEY,
       Date DATE,
       Product_Name VARCHAR(255),

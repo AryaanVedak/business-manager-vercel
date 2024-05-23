@@ -54,7 +54,7 @@ export default function AddInvoice() {
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (!file) return; // Handle no file selected
-
+    console.log(file)
     setSelectedFile(file);
 
     const reader = new FileReader();
@@ -109,9 +109,9 @@ export default function AddInvoice() {
 
   async function onSubmit(data: z.infer<typeof FormSchema>) {
 
-    if (data.date && data.paidDate) { // Check if data.date is not undefined
-      const formattedDate = format(new Date(data.date), 'dd-MM-yyyy');
-      const formattedPaidDate = format(new Date(data.paidDate), 'dd-MM-yyyy');
+    if (data.date) { // Check if data.date is not undefined
+      const formattedDate = format(new Date(data.date), 'MM-dd-yyyy');
+      const formattedPaidDate = data.paidDate ? format(new Date(data.paidDate), 'MM-dd-yyyy') : null;
 
       // Implement form submission logic here (e.g., send data to server)
       const filteredData = {
@@ -122,15 +122,18 @@ export default function AddInvoice() {
         GST_Percentage: data.gst,
         GST_Amount: data.gstAmount,
         Total_Amount: data.total,
-        Paid_Date: data.paidDate,
+        Paid_Date: formattedPaidDate,
         Remark: data.remark,
         Person: data.person,
         Invoice: base64String,
       };
+
+      console.log(filteredData)
       
       try {
+
         const response = await axios.post(
-          `http://https://business-manager-vercel.vercel.app/api/add-bill?Bill_No=${data.billNo}`, // Replace with your actual API endpoint URL
+          `http://localhost:3000/api/add-bill?Bill_No=${data.billNo}`, // Replace with your actual API endpoint URL
           filteredData,
           {
             headers: {
@@ -138,10 +141,12 @@ export default function AddInvoice() {
             },
           }
         );
+
         // Check for successful response (e.g., status code 200)
         if (response.status === 200) { // Assuming success code here
           console.log('API response:', response.data);
-  
+          console.log("Successful")
+
           // Clear form fields on successful submission
           form.reset({
             billNo: '',
@@ -156,10 +161,11 @@ export default function AddInvoice() {
             person: '',
             invoice: null, // Reset invoice to null
           });
-          } else {
-            console.error('API request failed:', response.status, response.data);
-            // Handle API errors here (e.g., display error message)
-          }
+
+        } else {
+          console.error('API request failed:', response.status, response.data);
+          // Handle API errors here (e.g., display error message)
+        }
       } catch (error) {
         console.error('Error submitting invoice:', error);
         // Handle API errors here (e.g., display error message)
@@ -168,9 +174,6 @@ export default function AddInvoice() {
     } else {
       // Handle the case where data.date is undefined (e.g., set a default value)
     }
-
-    console.log(data.date)
-
   }
 
   return (

@@ -24,7 +24,7 @@ interface Invoice {
 }
 
 async function getData() {
-  const res = await fetch('http://https://business-manager-vercel.vercel.app/api/get-bills')
+  const res = await fetch('http://localhost:3000/api/get-bills')
   // The return value is *not* serialized
   // You can return Date, Map, Set, etc.
  
@@ -39,6 +39,9 @@ async function getData() {
 export function DashTable() {
 
   const [invoices, setInvoices] = useState<Invoice[]>([]);
+  const [total, setTotal] = useState(0);
+  const [gstTotal, setGstTotal] = useState(0);
+  const [amount, setAmount] = useState(0);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -61,9 +64,14 @@ export function DashTable() {
   }, []);
 
   useEffect(() => {
-    console.log(invoices)
 
-    // const formatedDate = invoices.date
+    console.log(invoices)
+    const totalAmount = invoices.reduce((acc, invoice) => acc + parseFloat(invoice.total_amount as string), 0);
+    setTotal(totalAmount);
+    const gstTotalAmount = invoices.reduce((acc, invoice) => acc + parseFloat(invoice.gst_amount as string), 0);
+    setGstTotal(gstTotalAmount);
+    const amount = invoices.reduce((acc, invoice) => acc + parseFloat(invoice.amount as string), 0);
+    setAmount(amount);
 
   },[invoices])
 
@@ -98,7 +106,7 @@ export function DashTable() {
                 <TableCell className="text-right">{invoice.gst_percentage}%</TableCell>
                 <TableCell className="text-right">{invoice.gst_amount}</TableCell>
                 <TableCell className="text-right">{invoice.total_amount}</TableCell>
-                <TableCell>{new Date(invoice.paid_date).toLocaleDateString()}</TableCell>
+                <TableCell>{invoice.paid_date ? new Date(invoice.paid_date).toLocaleDateString() : null}</TableCell>
                 <TableCell>{invoice.remark}</TableCell>
                 <TableCell>{invoice.person}</TableCell>
                 <TableCell>Download</TableCell>
@@ -107,8 +115,12 @@ export function DashTable() {
           </TableBody>
           <TableFooter>
             <TableRow>
-              <TableCell colSpan={10}>Total</TableCell>
-              <TableCell className="text-right">$2,500.00</TableCell>
+              <TableCell colSpan={3} className="font-bold text-base">Total</TableCell>
+              <TableCell className="text-right font-bold text-base">{amount}</TableCell>
+              <TableCell className="text-right"></TableCell>
+              <TableCell className="text-right font-bold text-base">{gstTotal}</TableCell>
+              <TableCell className="text-right font-bold text-base">{total}</TableCell>
+              <TableCell colSpan={4}></TableCell>
             </TableRow>
           </TableFooter>
         </Table>
